@@ -1,3 +1,2 @@
-2026/04/14-19:15:38.832 304 Reusing MANIFEST /workspace/.browser_data/Default/Site Characteristics Database/MANIFEST-000001
-2026/04/14-19:15:38.867 304 Recovering log #3
-2026/04/14-19:15:38.868 304 Reusing old log /workspace/.browser_data/Default/Site Characteristics Database/000003.log 
+2026/04/13-07:54:47.861 a2 Creating DB /workspace/.browser_data/Default/Session Storage since it was missing.
+2026/04/13-07:54:47.871 a2 Reusing MANIFEST /workspace/.browser_data/Default/Session Storage/MANIFEST-000001
