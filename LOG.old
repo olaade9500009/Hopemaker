@@ -1,2 +1,2 @@
-2026/04/13-07:54:47.855 9c Creating DB /workspace/.browser_data/Default/Local Storage/leveldb since it was missing.
-2026/04/13-07:54:47.869 9c Reusing MANIFEST /workspace/.browser_data/Default/Local Storage/leveldb/MANIFEST-000001
+2026/04/13-07:54:50.626 75 Creating DB /workspace/.browser_data/Default/GCM Store since it was missing.
+2026/04/13-07:54:50.632 75 Reusing MANIFEST /workspace/.browser_data/Default/GCM Store/MANIFEST-000001
