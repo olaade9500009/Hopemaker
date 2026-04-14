@@ -1,0 +1,652 @@
+<![CDATA[<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Automated Banking</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .user-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    
+    .user-main {
+      margin-left: 260px;
+      min-height: 100vh;
+    }
+    
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .quick-action-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.25rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      color: var(--text-primary);
+    }
+    
+    .quick-action-btn:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+    
+    .quick-action-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .quick-action-text {
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+    
+    .balance-card {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
+    }
+    
+    .balance-label {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      margin-bottom: 0.25rem;
+    }
+    
+    .balance-amount {
+      font-size: 2.5rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+    }
+    
+    .balance-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    
+    .balance-btn {
+      flex: 1;
+      padding: 0.75rem;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: var(--border-radius-sm);
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .balance-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .user-sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .user-sidebar.open {
+        transform: translateX(0);
+      }
+      
+      .user-main {
+        margin-left: 0;
+      }
+    }
+  </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+  <!-- User Sidebar -->
+  <aside class="user-sidebar">
+    <div class="sidebar-header">
+      <a href="../index.html" class="sidebar-logo">
+        <div class="sidebar-logo-icon">🏦</div>
+        <span>Automated</span>
+      </a>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Main Menu</div>
+        <div class="nav-item active">
+          <span class="nav-item-icon">📊</span>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">💳</span>
+          <span>Virtual Account</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">📤</span>
+          <span>Transfer</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">📥</span>
+          <span>Deposit</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">📜</span>
+          <span>Transactions</span>
+        </div>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <div class="nav-item">
+          <span class="nav-item-icon">👤</span>
+          <span>Profile</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">✅</span>
+          <span>KYC Verification</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">⚙️</span>
+          <span>Settings</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">🔔</span>
+          <span>Notifications</span>
+        </div>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-section-title">Support</div>
+        <div class="nav-item">
+          <span class="nav-item-icon">❓</span>
+          <span>Help Center</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-item-icon">📞</span>
+          <span>Contact Us</span>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div class="flex items-center gap-3">
+        <div class="user-avatar" id="userAvatar">DU</div>
+        <div class="flex-1">
+          <div style="font-weight: 500; font-size: 0.875rem;" id="userName">Demo User</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);" id="userEmail">demo@automated.com</div>
+        </div>
+      </div>
+      <button class="btn btn-outline btn-sm mt-2" style="width: 100%;" onclick="logout()">
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="user-main">
+    <!-- Top Nav -->
+    <header class="top-nav">
+      <div class="top-nav-left">
+        <button class="btn btn-icon btn-outline" id="menuToggle" style="display: none;">
+          ☰
+        </button>
+        <h1 class="top-nav-title">Dashboard</h1>
+      </div>
+      <div class="top-nav-right">
+        <div class="search-box">
+          <span class="search-box-icon">🔍</span>
+          <input type="text" placeholder="Search transactions...">
+        </div>
+        <button class="btn btn-icon btn-outline notification-btn" data-count="3">
+          🔔
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <!-- Welcome Message -->
+      <div class="alert alert-info" style="margin-bottom: 1.5rem;">
+        <span class="alert-icon">👋</span>
+        <div>
+          <strong>Welcome back!</strong> Your account is active and ready for transactions.
+        </div>
+      </div>
+
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <div class="balance-label">Available Balance</div>
+        <div class="balance-amount">₦<span id="balanceAmount">50,000.00</span></div>
+        <div class="balance-actions">
+          <button class="balance-btn" onclick="openDepositModal()">
+            <span>📥</span> Add Money
+          </button>
+          <button class="balance-btn" onclick="openWithdrawModal()">
+            <span>📤</span> Withdraw
+          </button>
+          <button class="balance-btn" onclick="openTransferModal()">
+            <span>↔️</span> Transfer
+          </button>
+        </div>
+      </div>
+
+      <!-- Virtual Account Info -->
+      <div class="grid grid-2 mt-3" style="gap: 1.5rem;">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Virtual Account</h3>
+            <span class="badge badge-success">Active</span>
+          </div>
+          <div class="card-body">
+            <div style="background: var(--bg-input); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+              <div class="text-muted" style="font-size: 0.75rem; margin-bottom: 0.25rem;">Account Number</div>
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600;" id="accountNumber">0123456789</span>
+                <button class="btn btn-sm btn-outline" onclick="copyAccountNumber()">📋 Copy</button>
+              </div>
+            </div>
+            <div class="grid grid-2" style="gap: 1rem;">
+              <div>
+                <div class="text-muted" style="font-size: 0.75rem; margin-bottom: 0.25rem;">Bank Name</div>
+                <div style="font-size: 0.875rem;" id="bankName">WEMA BANK</div>
+              </div>
+              <div>
+                <div class="text-muted" style="font-size: 0.75rem; margin-bottom: 0.25rem;">Account Name</div>
+                <div style="font-size: 0.875rem;" id="accountName">DEMO USER</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Actions</h3>
+          </div>
+          <div class="card-body">
+            <div class="quick-actions">
+              <button class="quick-action-btn" onclick="openTransferModal()">
+                <div class="quick-action-icon">💸</div>
+                <div class="quick-action-text">Send Money</div>
+              </button>
+              <button class="quick-action-btn" onclick="openDepositModal()">
+                <div class="quick-action-icon">📥</div>
+                <div class="quick-action-text">Deposit</div>
+              </button>
+              <button class="quick-action-btn">
+                <div class="quick-action-icon">📱</div>
+                <div class="quick-action-text">Airtime</div>
+              </button>
+              <button class="quick-action-btn">
+                <div class="quick-action-icon">💡</div>
+                <div class="quick-action-text">Electricity</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="card mt-3">
+        <div class="card-header">
+          <h3 class="card-title">Recent Transactions</h3>
+          <a href="#" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="card-body">
+          <div class="transaction-list" id="transactionList">
+            <!-- Transactions will be loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- KYC Status -->
+      <div class="card mt-3">
+        <div class="card-header">
+          <h3 class="card-title">KYC Verification Status</h3>
+        </div>
+        <div class="card-body">
+          <div class="kyc-status-grid">
+            <div class="kyc-status-item">
+              <div class="kyc-status-icon verified">✓</div>
+              <div class="kyc-status-label">Email</div>
+              <div class="kyc-status-value text-success">Verified</div>
+            </div>
+            <div class="kyc-status-item">
+              <div class="kyc-status-icon verified">✓</div>
+              <div class="kyc-status-label">Phone</div>
+              <div class="kyc-status-value text-success">Verified</div>
+            </div>
+            <div class="kyc-status-item">
+              <div class="kyc-status-icon" id="bvnStatusIcon">⏳</div>
+              <div class="kyc-status-label">BVN</div>
+              <div class="kyc-status-value" id="bvnStatus">Pending</div>
+            </div>
+            <div class="kyc-status-item">
+              <div class="kyc-status-icon" id="idStatusIcon">⏳</div>
+              <div class="kyc-status-label">ID Card</div>
+              <div class="kyc-status-value" id="idStatus">Not Uploaded</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Transfer Modal -->
+  <div class="modal-overlay" id="transferModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Transfer Money</h3>
+        <button class="modal-close" onclick="closeModal('transferModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="transferForm">
+          <div class="form-group">
+            <label class="form-label">Recipient Bank</label>
+            <select class="form-control form-select" id="recipientBank" required>
+              <option value="">Select bank</option>
+              <option value="access">Access Bank</option>
+              <option value="gtb">GTBank</option>
+              <option value="uba">UBA</option>
+              <option value="zenith">Zenith Bank</option>
+              <option value="first">First Bank</option>
+              <option value="wema">Wema Bank</option>
+              <option value="kuda">Kuda Bank</option>
+              <option value="opay">OPay</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Account Number</label>
+            <input type="text" class="form-control" id="recipientAccount" placeholder="Enter account number" maxlength="10" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Account Name</label>
+            <input type="text" class="form-control" id="recipientName" placeholder="Will auto-fill" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount (₦)</label>
+            <input type="number" class="form-control" id="transferAmount" placeholder="Enter amount" min="100" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Narration (Optional)</label>
+            <input type="text" class="form-control" id="transferNarration" placeholder="What's this for?">
+          </div>
+          <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">
+            Continue
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deposit Modal -->
+  <div class="modal-overlay" id="depositModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Money</h3>
+        <button class="modal-close" onclick="closeModal('depositModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info" style="margin-bottom: 1rem;">
+          <span class="alert-icon">ℹ️</span>
+          <div>Transfer to your virtual account number below. Funds will be credited automatically.</div>
+        </div>
+        <div class="virtual-account-card">
+          <span class="virtual-account-bank" id="depositBankName">MONNIFY - WEMA BANK</span>
+          <div class="virtual-account-number" id="depositAccountNumber">0123456789</div>
+          <div class="virtual-account-name" id="depositAccountName">DEMO USER</div>
+          <button class="copy-btn" onclick="copyDepositAccountNumber()">📋</button>
+        </div>
+        <p class="text-muted mt-2" style="font-size: 0.8125rem;">
+          Funds sent to this account will be automatically credited to your wallet within 2 minutes.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Withdraw Modal -->
+  <div class="modal-overlay" id="withdrawModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Withdraw Funds</h3>
+        <button class="modal-close" onclick="closeModal('withdrawModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="withdrawForm">
+          <div class="form-group">
+            <label class="form-label">Bank Account</label>
+            <select class="form-control form-select" id="withdrawBank" required>
+              <option value="">Select bank</option>
+              <option value="access">Access Bank</option>
+              <option value="gtb">GTBank</option>
+              <option value="uba">UBA</option>
+              <option value="zenith">Zenith Bank</option>
+              <option value="first">First Bank</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Account Number</label>
+            <input type="text" class="form-control" id="withdrawAccount" placeholder="Enter account number" maxlength="10" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount (₦)</label>
+            <input type="number" class="form-control" id="withdrawAmount" placeholder="Enter amount" min="100" required>
+          </div>
+          <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">
+            Withdraw
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    // Load user data
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (!currentUser) {
+      // Demo user
+      currentUser = {
+        firstName: 'Demo',
+        lastName: 'User',
+        email: 'demo@automated.com',
+        phone: '08012345678',
+        accountId: 'AUT-DEMO1',
+        accountNumber: '0123456789',
+        bankName: 'MONNIFY - WEMA BANK',
+        balance: 50000,
+        status: 'active',
+        kycStatus: 'verified',
+        createdAt: new Date().toISOString()
+      };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    }
+
+    // Initialize dashboard
+    function initDashboard() {
+      document.getElementById('userName').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+      document.getElementById('userEmail').textContent = currentUser.email;
+      document.getElementById('userAvatar').textContent = `${currentUser.firstName[0]}${currentUser.lastName[0]}`;
+      document.getElementById('balanceAmount').textContent = formatCurrency(currentUser.balance);
+      document.getElementById('accountNumber').textContent = currentUser.accountNumber;
+      document.getElementById('bankName').textContent = currentUser.bankName;
+      document.getElementById('accountName').textContent = `${currentUser.firstName.toUpperCase()} ${currentUser.lastName.toUpperCase()}`;
+      
+      // Deposit modal data
+      document.getElementById('depositBankName').textContent = currentUser.bankName;
+      document.getElementById('depositAccountNumber').textContent = currentUser.accountNumber;
+      document.getElementById('depositAccountName').textContent = `${currentUser.firstName.toUpperCase()} ${currentUser.lastName.toUpperCase()}`;
+      
+      // Load transactions
+      loadTransactions();
+      
+      // Update KYC status display
+      if (currentUser.kycStatus === 'verified') {
+        document.getElementById('bvnStatusIcon').className = 'kyc-status-icon verified';
+        document.getElementById('bvnStatusIcon').textContent = '✓';
+        document.getElementById('bvnStatus').textContent = 'Verified';
+        document.getElementById('bvnStatus').className = 'kyc-status-value text-success';
+      }
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-NG', { minimumFractionDigits: 2 }).format(amount);
+    }
+
+    function loadTransactions() {
+      const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+      const defaultTransactions = [
+        { id: 1, type: 'credit', title: 'Wallet Funding', amount: 25000, date: new Date().toISOString(), status: 'completed', reference: 'TXN-001' },
+        { id: 2, type: 'debit', title: 'Transfer to John Doe', amount: 5000, date: new Date(Date.now() - 86400000).toISOString(), status: 'completed', reference: 'TXN-002' },
+        { id: 3, type: 'credit', title: 'Wallet Funding', amount: 30000, date: new Date(Date.now() - 172800000).toISOString(), status: 'completed', reference: 'TXN-003' }
+      ];
+      
+      const allTransactions = transactions.length > 0 ? transactions : defaultTransactions;
+      
+      const listHtml = allTransactions.slice(0, 5).map(t => `
+        <div class="transaction-item">
+          <div class="transaction-icon ${t.type}">${t.type === 'credit' ? '📥' : '📤'}</div>
+          <div class="transaction-details">
+            <div class="transaction-title">${t.title}</div>
+            <div class="transaction-meta">${new Date(t.date).toLocaleDateString('en-NG')} • ${t.reference}</div>
+          </div>
+          <div class="transaction-amount ${t.type}">
+            ${t.type === 'credit' ? '+' : '-'}₦${formatCurrency(t.amount)}
+          </div>
+        </div>
+      `).join('');
+      
+      document.getElementById('transactionList').innerHTML = listHtml;
+    }
+
+    function openTransferModal() {
+      document.getElementById('transferModal').classList.add('active');
+    }
+
+    function openDepositModal() {
+      document.getElementById('depositModal').classList.add('active');
+    }
+
+    function openWithdrawModal() {
+      document.getElementById('withdrawModal').classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function copyAccountNumber() {
+      navigator.clipboard.writeText(currentUser.accountNumber);
+      alert('Account number copied!');
+    }
+
+    function copyDepositAccountNumber() {
+      navigator.clipboard.writeText(currentUser.accountNumber);
+      alert('Account number copied!');
+    }
+
+    // Transfer form handler
+    document.getElementById('transferForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('transferAmount').value);
+      
+      if (amount > currentUser.balance) {
+        alert('Insufficient balance!');
+        return;
+      }
+      
+      // Process transfer
+      currentUser.balance -= amount;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      
+      // Add transaction
+      const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+      transactions.unshift({
+        id: Date.now(),
+        type: 'debit',
+        title: `Transfer to ${document.getElementById('recipientName').value || 'Account'}`,
+        amount: amount,
+        date: new Date().toISOString(),
+        status: 'completed',
+        reference: 'TXN-' + Date.now().toString().slice(-6)
+      });
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+      
+      closeModal('transferModal');
+      initDashboard();
+      alert('Transfer successful!');
+    });
+
+    // Withdraw form handler
+    document.getElementById('withdrawForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('withdrawAmount').value);
+      
+      if (amount > currentUser.balance) {
+        alert('Insufficient balance!');
+        return;
+      }
+      
+      currentUser.balance -= amount;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      
+      const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+      transactions.unshift({
+        id: Date.now(),
+        type: 'debit',
+        title: 'Withdrawal',
+        amount: amount,
+        date: new Date().toISOString(),
+        status: 'completed',
+        reference: 'TXN-' + Date.now().toString().slice(-6)
+      });
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+      
+      closeModal('withdrawModal');
+      initDashboard();
+      alert('Withdrawal initiated! Funds will arrive in 2-5 minutes.');
+    });
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = '../login.html';
+    }
+
+    // Initialize
+    initDashboard();
+  </script>
+</body>
+</html>
+]]>

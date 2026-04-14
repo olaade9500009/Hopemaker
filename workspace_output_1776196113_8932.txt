@@ -1,0 +1,9 @@
+./css/styles.css
+./admin/index.html
+./admin/admin.js
+./admin/dashboard.html
+./user/dashboard.html
+./index.html
+./js/app.js
+./signup.html
+./login.html
