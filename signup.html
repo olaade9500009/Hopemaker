@@ -1,0 +1,236 @@
+<![CDATA[<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - Automated Banking</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card fade-in">
+      <div class="auth-header">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">
+          <div class="sidebar-logo-icon">🏦</div>
+          Automated Banking
+        </a>
+        <h1 class="auth-title">Create Your Account</h1>
+        <p class="auth-subtitle">Join thousands of Nigerians banking smarter</p>
+      </div>
+
+      <form id="signupForm">
+        <div class="grid grid-2" style="gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="Enter first name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Enter last name" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" id="phone" placeholder="e.g., 08012345678" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">BVN (Bank Verification Number)</label>
+          <input type="text" class="form-control" id="bvn" placeholder="Enter 11-digit BVN" maxlength="11" pattern="[0-9]{11}">
+          <span class="form-hint">Your BVN is required for KYC verification</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="Create a strong password" required minlength="8">
+          <span class="form-hint">Minimum 8 characters with letters and numbers</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preferred Payment Partner</label>
+          <select class="form-control form-select" id="paymentPartner" required>
+            <option value="">Select payment partner</option>
+            <option value="monnify">Monnify</option>
+            <option value="flutterwave">Flutterwave</option>
+            <option value="palmpay">Palmpay</option>
+            <option value="opay">OPay</option>
+            <option value="monipoint">Monipoint</option>
+          </select>
+          <span class="form-hint">This will be used to generate your virtual account</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-check">
+            <input type="checkbox" id="terms" required>
+            <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">
+          Create Account
+        </button>
+      </form>
+
+      <div class="auth-divider">or continue with</div>
+
+      <div class="grid grid-2" style="gap: 1rem;">
+        <button class="btn btn-outline" style="width: 100%;">
+          <span>🌐</span> Google
+        </button>
+        <button class="btn btn-outline" style="width: 100%;">
+          <span>📘</span> Facebook
+        </button>
+      </div>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal" style="max-width: 550px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🎉 Account Created Successfully!</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success">
+          <span class="alert-icon">✓</span>
+          <div>
+            <strong>Welcome to Automated Banking!</strong><br>
+            Your account has been created and your virtual account number is ready.
+          </div>
+        </div>
+
+        <div class="virtual-account-card" style="margin: 1.5rem 0;">
+          <span class="virtual-account-bank" id="bankName">MONNIFY - WEMA BANK</span>
+          <div class="virtual-account-number" id="accountNumber">0123456789</div>
+          <div class="virtual-account-name" id="accountName">JOHN DOE</div>
+          <button class="copy-btn" onclick="copyAccountNumber()" title="Copy account number">📋</button>
+        </div>
+
+        <div style="background: var(--bg-input); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Your Login Credentials</div>
+          <div style="font-family: var(--font-mono); font-size: 0.875rem;">
+            <div><span class="text-muted">Email:</span> <span id="displayEmail">user@example.com</span></div>
+            <div><span class="text-muted">Account ID:</span> <span id="accountId">AUT-123456</span></div>
+          </div>
+        </div>
+
+        <p class="text-muted" style="font-size: 0.8125rem;">
+          ⚡ Fund your virtual account to activate it. You'll receive instant credit notifications via SMS and email.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal()">Close</button>
+        <a href="user/dashboard.html" class="btn btn-accent">Go to Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    // Generate random account number
+    function generateAccountNumber() {
+      return Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    }
+
+    // Generate unique account ID
+    function generateAccountId() {
+      return 'AUT-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+    }
+
+    // Form submission handler
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+
+      const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        bvn: document.getElementById('bvn').value,
+        paymentPartner: document.getElementById('paymentPartner').value
+      };
+
+      // Generate virtual account details
+      const partners = {
+        monnify: 'MONNIFY - WEMA BANK',
+        flutterwave: 'FLUTTERWAVE - WEMA BANK',
+        palmpay: 'PALMPAY - WEMA BANK',
+        opay: 'OPAY - OPAY MFB',
+        monipoint: 'MONIPOINT - WEMA BANK'
+      };
+
+      // Store user data
+      const userData = {
+        ...formData,
+        accountId: generateAccountId(),
+        accountNumber: generateAccountNumber(),
+        bankName: partners[formData.paymentPartner],
+        balance: 0,
+        status: 'pending',
+        kycStatus: 'pending',
+        createdAt: new Date().toISOString()
+      };
+
+      // Save to localStorage (simulating backend)
+      let users = JSON.parse(localStorage.getItem('automatedBankUsers') || '[]');
+      users.push(userData);
+      localStorage.setItem('automatedBankUsers', JSON.stringify(users));
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+
+      // Update modal content
+      document.getElementById('bankName').textContent = userData.bankName;
+      document.getElementById('accountNumber').textContent = userData.accountNumber;
+      document.getElementById('accountName').textContent = `${userData.firstName.toUpperCase()} ${userData.lastName.toUpperCase()}`;
+      document.getElementById('displayEmail').textContent = userData.email;
+      document.getElementById('accountId').textContent = userData.accountId;
+
+      // Show success modal
+      document.getElementById('successModal').classList.add('active');
+    });
+
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('active');
+    }
+
+    function copyAccountNumber() {
+      const accountNumber = document.getElementById('accountNumber').textContent;
+      navigator.clipboard.writeText(accountNumber);
+      alert('Account number copied!');
+    }
+
+    // Close modal on overlay click
+    document.getElementById('successModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
+]]>
